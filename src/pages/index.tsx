@@ -1,193 +1,205 @@
-import * as React from "react"
-import type { HeadFC, PageProps } from "gatsby"
+import * as React from "react";
+import { graphql, Link, PageProps, HeadFC } from "gatsby";
 
-const pageStyles = {
-  color: "#232129",
-  padding: 96,
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
-const headingAccentStyles = {
-  color: "#663399",
-}
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
-const listStyles = {
-  marginBottom: 96,
-  paddingLeft: 0,
-}
-const doclistStyles = {
-  paddingLeft: 0,
-}
-const listItemStyles = {
-  fontWeight: 300,
-  fontSize: 24,
-  maxWidth: 560,
-  marginBottom: 30,
+interface IndexPageData {
+  allBooks: {
+    nodes: Array<{
+      frontmatter: {
+        slug: string;
+        title: string;
+        titleFarsi?: string;
+        author: string;
+        bookNumber: number;
+        status: string;
+        coverImage?: string;
+      };
+    }>;
+  };
+  allSessions: {
+    nodes: Array<{
+      frontmatter: {
+        slug: string;
+        title: string;
+        date: string;
+        sessionNumber: number;
+        bookSlug: string;
+      };
+    }>;
+  };
 }
 
-const linkStyle = {
-  color: "#8954A8",
-  fontWeight: "bold",
-  fontSize: 16,
-  verticalAlign: "5%",
-}
+const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
+  const { allBooks, allSessions } = data;
+  
+  // Sort books by status and number
+  const sortedBooks = [...allBooks.nodes].sort((a, b) => {
+    const statusOrder = { current: 0, upcoming: 1, completed: 2 };
+    const statusA = statusOrder[a.frontmatter.status as keyof typeof statusOrder] ?? 3;
+    const statusB = statusOrder[b.frontmatter.status as keyof typeof statusOrder] ?? 3;
+    
+    if (statusA !== statusB) return statusA - statusB;
+    return b.frontmatter.bookNumber - a.frontmatter.bookNumber;
+  });
 
-const docLinkStyle = {
-  ...linkStyle,
-  listStyleType: "none",
-  display: `inline-block`,
-  marginBottom: 24,
-  marginRight: 12,
-}
+  // Sort sessions by date (newest first)
+  const sortedSessions = [...allSessions.nodes].sort((a, b) => 
+    new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+  );
 
-const descriptionStyle = {
-  color: "#232129",
-  fontSize: 14,
-  marginTop: 10,
-  marginBottom: 0,
-  lineHeight: 1.25,
-}
-
-const docLinks = [
-  {
-    text: "TypeScript Documentation",
-    url: "https://www.gatsbyjs.com/docs/how-to/custom-configuration/typescript/",
-    color: "#8954A8",
-  },
-  {
-    text: "GraphQL Typegen Documentation",
-    url: "https://www.gatsbyjs.com/docs/how-to/local-development/graphql-typegen/",
-    color: "#8954A8",
-  }
-]
-
-const badgeStyle = {
-  color: "#fff",
-  backgroundColor: "#088413",
-  border: "1px solid #088413",
-  fontSize: 11,
-  fontWeight: "bold",
-  letterSpacing: 1,
-  borderRadius: 4,
-  padding: "4px 6px",
-  display: "inline-block",
-  position: "relative" as "relative",
-  top: -2,
-  marginLeft: 10,
-  lineHeight: 1,
-}
-
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial/getting-started/",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-    color: "#E95800",
-  },
-  {
-    text: "How to Guides",
-    url: "https://www.gatsbyjs.com/docs/how-to/",
-    description:
-      "Practical step-by-step guides to help you achieve a specific goal. Most useful when you're trying to get something done.",
-    color: "#1099A8",
-  },
-  {
-    text: "Reference Guides",
-    url: "https://www.gatsbyjs.com/docs/reference/",
-    description:
-      "Nitty-gritty technical descriptions of how Gatsby works. Most useful when you need detailed information about Gatsby's APIs.",
-    color: "#BC027F",
-  },
-  {
-    text: "Conceptual Guides",
-    url: "https://www.gatsbyjs.com/docs/conceptual/",
-    description:
-      "Big-picture explanations of higher-level Gatsby concepts. Most useful for building understanding of a particular topic.",
-    color: "#0D96F2",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-    color: "#8EB814",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    badge: true,
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-    color: "#663399",
-  },
-]
-
-const IndexPage: React.FC<PageProps> = () => {
   return (
-    <main style={pageStyles}>
-      <h1 style={headingStyles}>
-        Congratulations
-        <br />
-        <span style={headingAccentStyles}>— you just made a Gatsby site! 🎉🎉🎉</span>
-      </h1>
-      <p style={paragraphStyles}>
-        Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this page
-        update in real-time. 😎
-      </p>
-      <ul style={doclistStyles}>
-        {docLinks.map(doc => (
-          <li key={doc.url} style={docLinkStyle}>
-            <a
-              style={linkStyle}
-              href={`${doc.url}?utm_source=starter&utm_medium=ts-docs&utm_campaign=minimal-starter-ts`}
-            >
-              {doc.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <ul style={listStyles}>
-        {links.map(link => (
-          <li key={link.url} style={{ ...listItemStyles, color: link.color }}>
-            <span>
-              <a
-                style={linkStyle}
-                href={`${link.url}?utm_source=starter&utm_medium=start-page&utm_campaign=minimal-starter-ts`}
-              >
-                {link.text}
-              </a>
-              {link.badge && (
-                <span style={badgeStyle} aria-label="New Badge">
-                  NEW!
-                </span>
-              )}
-              <p style={descriptionStyle}>{link.description}</p>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <img
-        alt="Gatsby G Logo"
-        src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
-      />
-    </main>
-  )
-}
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold text-gray-900 text-center">
+            باشگاه کتابخوانی گونیا
+          </h1>
+          <p className="text-gray-600 text-center mt-2">
+            هر هفته، یک کتاب جدید
+          </p>
+        </div>
+      </header>
 
-export default IndexPage
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          {/* Books Section */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">کتاب‌ها</h2>
+            <div className="space-y-6">
+              {sortedBooks.map((book) => (
+                <div key={book.frontmatter.slug} className="bg-white rounded-lg shadow-md p-6">
+                  <div className="flex items-start gap-4">
+                    {book.frontmatter.coverImage && (
+                      <img 
+                        src={book.frontmatter.coverImage} 
+                        alt={book.frontmatter.title}
+                        className="w-16 h-24 object-cover rounded"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                          کتاب {book.frontmatter.bookNumber}
+                        </span>
+                        <span className={`text-xs px-2 py-1 rounded ${
+                          book.frontmatter.status === 'completed' ? 'bg-green-100 text-green-800' :
+                          book.frontmatter.status === 'current' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {book.frontmatter.status === 'completed' ? 'تکمیل شده' :
+                           book.frontmatter.status === 'current' ? 'در حال خواندن' : 'آینده'}
+                        </span>
+                      </div>
+                      
+                      <Link 
+                        to={`/books/${book.frontmatter.slug}`}
+                        className="text-lg font-semibold text-gray-900 hover:text-blue-600 line-clamp-2"
+                      >
+                        {book.frontmatter.title}
+                      </Link>
+                      
+                      {book.frontmatter.titleFarsi && (
+                        <p className="text-gray-600 text-sm mt-1">
+                          {book.frontmatter.titleFarsi}
+                        </p>
+                      )}
+                      
+                      <p className="text-gray-500 text-sm mt-1">
+                        نویسنده: {book.frontmatter.author}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
 
-export const Head: HeadFC = () => <title>Home Page</title>
+          {/* Sessions Section */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">جلسات اخیر</h2>
+            <div className="space-y-6">
+              {sortedSessions.slice(0, 10).map((session) => {
+                const relatedBook = allBooks.nodes.find(
+                  book => book.frontmatter.slug === session.frontmatter.bookSlug
+                );
+                
+                return (
+                  <div key={session.frontmatter.slug} className="bg-white rounded-lg shadow-md p-6">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <Link 
+                          to={`/sessions/${session.frontmatter.slug}`}
+                          className="text-lg font-semibold text-gray-900 hover:text-blue-600"
+                        >
+                          {session.frontmatter.title}
+                        </Link>
+                        <p className="text-gray-500 text-sm mt-1">
+                          {new Date(session.frontmatter.date).toLocaleDateString('fa-IR')} • 
+                          جلسه {session.frontmatter.sessionNumber}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {relatedBook && (
+                      <div className="bg-gray-50 rounded p-3 mt-3">
+                        <Link 
+                          to={`/books/${relatedBook.frontmatter.slug}`}
+                          className="text-sm font-medium text-blue-600 hover:text-blue-800"
+                        >
+                          📚 {relatedBook.frontmatter.title}
+                        </Link>
+                        {relatedBook.frontmatter.titleFarsi && (
+                          <p className="text-xs text-gray-600 mt-1">
+                            {relatedBook.frontmatter.titleFarsi}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default IndexPage;
+
+export const Head: HeadFC = () => <title>باشگاه کتابخوانی گونیا</title>;
+
+export const query = graphql`
+  query {
+    allBooks: allMdx(
+      filter: { internal: { contentFilePath: { regex: "/books/" } } }
+    ) {
+      nodes {
+        frontmatter {
+          slug
+          title
+          titleFarsi
+          author
+          bookNumber
+          status
+          coverImage
+        }
+      }
+    }
+    allSessions: allMdx(
+      filter: { internal: { contentFilePath: { regex: "/sessions/" } } }
+    ) {
+      nodes {
+        frontmatter {
+          slug
+          title
+          date
+          sessionNumber
+          bookSlug
+        }
+      }
+    }
+  }
+`;

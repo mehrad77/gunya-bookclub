@@ -28,6 +28,20 @@ const config: GatsbyConfig = {
       "path": "./src/pages/"
     },
     __key: "pages"
+  }, {
+    resolve: 'gatsby-source-filesystem',
+    options: {
+      "name": "books",
+      "path": "./content/books/"
+    },
+    __key: "books"
+  }, {
+    resolve: 'gatsby-source-filesystem',
+    options: {
+      "name": "sessions",
+      "path": "./content/sessions/"
+    },
+    __key: "sessions"
   }]
 };
 
