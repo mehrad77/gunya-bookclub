@@ -2,6 +2,7 @@ import React from "react";
 import { graphql, Link, PageProps, type HeadFC } from "gatsby";
 import Seo from "../components/Seo";
 import Logo from "../components/Logo";
+import SessionCard from "../components/SessionCard";
 
 interface BookPageContext {
   id: string;
@@ -238,67 +239,13 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                 جلسات مرتبط
               </h3>
               <div className="space-y-6">
-                {relatedSessions.nodes.map((session) => {
-                  // Helper function to get status badge
-                  const getStatusBadge = () => {
-                    const sessionDate = new Date(session.frontmatter.date);
-                    const now = new Date();
-                    
-                    let status = session.frontmatter.status;
-                    
-                    // If no explicit status, determine based on date
-                    if (!status) {
-                      status = sessionDate < now ? 'held' : 'upcoming';
-                    }
-                    
-                    switch (status) {
-                      case 'held':
-                        return {
-                          text: 'برگزار شده',
-                          className: 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-200'
-                        };
-                      case 'upcoming':
-                        return {
-                          text: 'آینده',
-                          className: 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200'
-                        };
-                      case 'cancelled':
-                        return {
-                          text: 'لغو شده',
-                          className: 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-red-50 text-red-700 border border-red-200'
-                        };
-                      default:
-                        return {
-                          text: 'نامشخص',
-                          className: 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200'
-                        };
-                    }
-                  };
-
-                  const statusBadge = getStatusBadge();
-
-                  return (
-                    <div key={session.frontmatter.slug} className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className={statusBadge.className}>
-                          {statusBadge.text}
-                        </span>
-                        <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-50 text-gray-700 border border-gray-200">
-                          جلسه {session.frontmatter.sessionNumber}
-                        </span>
-                      </div>
-                      <Link 
-                        to={`/sessions/${session.frontmatter.slug}`}
-                        className="block text-xl font-medium text-blue-700 hover:text-blue-800 transition-colors duration-200"
-                      >
-                        {session.frontmatter.title}
-                      </Link>
-                      <p className="text-blue-600 font-light mt-2">
-                        {new Date(session.frontmatter.date).toLocaleDateString('fa-IR')}
-                      </p>
-                    </div>
-                  );
-                })}
+                {relatedSessions.nodes.map((session) => (
+                  <SessionCard 
+                    key={session.frontmatter.slug}
+                    session={session.frontmatter}
+                    variant="default"
+                  />
+                ))}
               </div>
             </div>
           </div>

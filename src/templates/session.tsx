@@ -3,6 +3,8 @@ import { graphql, Link, PageProps, HeadFC } from "gatsby";
 import { MDXProvider } from "@mdx-js/react";
 import Seo from "../components/Seo";
 import Logo from "../components/Logo";
+import BookInfoCard from "../components/BookInfoCard";
+import StatusBadge from "../components/StatusBadge";
 
 interface SessionPageContext {
   id: string;
@@ -44,8 +46,8 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
   const { mdx } = data;
   const { frontmatter } = mdx;
 
-  // Helper function to get status badge
-  const getStatusBadge = () => {
+  // Helper function to get session status
+  const getSessionStatus = () => {
     const sessionDate = new Date(frontmatter.date);
     const now = new Date();
 
@@ -56,35 +58,17 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
       status = sessionDate < now ? "held" : "upcoming";
     }
 
-    switch (status) {
-      case "held":
-        return {
-          text: "برگزار شده",
-          className:
-            "status-badge bg-green-50 text-green-700 border border-green-200",
-        };
-      case "upcoming":
-        return {
-          text: "آینده",
-          className:
-            "status-badge bg-blue-50 text-blue-700 border border-blue-200",
-        };
-      case "cancelled":
-        return {
-          text: "لغو شده",
-          className:
-            "status-badge bg-red-50 text-red-700 border border-red-200",
-        };
-      default:
-        return {
-          text: "نامشخص",
-          className:
-            "status-badge bg-gray-50 text-gray-700 border border-gray-200",
-        };
-    }
+    return status;
   };
 
-  const statusBadge = getStatusBadge();
+  const sessionStatus = getSessionStatus();
+
+  // Determine event status based on session status for SEO
+  const getEventStatus = () => {
+    if (sessionStatus === "cancelled") return "EventCancelled";
+    if (sessionStatus === "held") return "EventCompleted";
+    return "EventScheduled";
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
@@ -109,9 +93,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
               <div className={`${data.book ? "lg:w-2/3" : "w-full"} space-y-6`}>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <span className={statusBadge.className}>
-                      {statusBadge.text}
-                    </span>
+                    <StatusBadge status={sessionStatus} />
                     <span className="status-badge bg-gray-50 text-gray-700 border border-gray-200">
                       جلسه {frontmatter.sessionNumber}
                     </span>
@@ -150,65 +132,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
               {/* Related Book Card - Left Side */}
               {data.book && (
                 <div className="lg:w-1/3 w-full">
-                  <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-xl p-6 h-full">
-                    <div className="space-y-4">
-                      {data.book.frontmatter.coverImage && (
-                        <div className="flex justify-center">
-                          <img
-                            src={data.book.frontmatter.coverImage}
-                            alt={data.book.frontmatter.title}
-                            className="w-24 h-32 object-cover rounded-xl shadow-sm"
-                          />
-                        </div>
-                      )}
-
-                      <div className="space-y-3 text-center">
-                        <div className="flex justify-center">
-                          <span className="status-badge bg-blue-100 text-blue-700 border border-blue-200">
-                            📚 کتاب مرتبط
-                          </span>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Link
-                            to={`/books/${frontmatter.bookSlug}`}
-                            className="block text-lg font-medium text-blue-900 hover:text-blue-700 transition-colors duration-200"
-                          >
-                            {data.book.frontmatter.titleFarsi ||
-                              data.book.frontmatter.title}
-                          </Link>
-
-                          {data.book.frontmatter.title &&
-                            data.book.frontmatter.titleFarsi && (
-                              <p className="text-blue-700 font-light text-sm">
-                                {data.book.frontmatter.title}
-                              </p>
-                            )}
-                        </div>
-
-                        <div className="space-y-1 text-sm text-blue-600">
-                          <p>نویسنده: {data.book.frontmatter.author}</p>
-                          {data.book.frontmatter.translator && (
-                            <p>مترجم: {data.book.frontmatter.translator}</p>
-                          )}
-                          <p>سال انتشار: {data.book.frontmatter.year}</p>
-                          {data.book.frontmatter.pages && (
-                            <p>تعداد صفحات: {data.book.frontmatter.pages}</p>
-                          )}
-                        </div>
-
-                        <div className="pt-2">
-                          <Link
-                            to={`/books/${frontmatter.bookSlug}`}
-                            className="inline-flex items-center text-blue-700 hover:text-blue-800 transition-colors duration-200 font-medium text-sm"
-                          >
-                            مشاهده جزئیات کتاب
-                            <span className="mr-2">←</span>
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <BookInfoCard book={data.book.frontmatter} />
                 </div>
               )}
             </div>
@@ -282,19 +206,27 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
       book?.frontmatter?.title || frontmatter.bookSlug
     }`;
 
-  // Determine event status based on session status and date
-  const getEventStatus = () => {
-    if (frontmatter.status === "cancelled") return "EventCancelled";
-    if (frontmatter.status === "held") return "EventCompleted";
-
-    // If no explicit status, check if the date has passed
+  // Helper function to get session status for Head component
+  const getSessionStatus = () => {
     const sessionDate = new Date(frontmatter.date);
     const now = new Date();
 
-    if (sessionDate < now && frontmatter.status !== "upcoming") {
-      return "EventCompleted";
+    let status = frontmatter.status;
+
+    // If no explicit status, determine based on date
+    if (!status) {
+      status = sessionDate < now ? "held" : "upcoming";
     }
 
+    return status;
+  };
+
+  const sessionStatus = getSessionStatus();
+
+  // Determine event status based on session status for SEO
+  const getEventStatus = () => {
+    if (sessionStatus === "cancelled") return "EventCancelled";
+    if (sessionStatus === "held") return "EventCompleted";
     return "EventScheduled";
   };
 
