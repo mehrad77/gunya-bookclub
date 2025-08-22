@@ -40,7 +40,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     if (book.frontmatter?.slug) {
       createPage({
         path: `/books/${book.frontmatter.slug}`,
-        component: bookTemplate,
+        component: `${bookTemplate}?__contentFilePath=${book.internal.contentFilePath}`,
         context: {
           id: book.id,
           slug: book.frontmatter.slug,
@@ -78,7 +78,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     if (session.frontmatter?.slug) {
       createPage({
         path: `/sessions/${session.frontmatter.slug}`,
-        component: sessionTemplate,
+        component: `${sessionTemplate}?__contentFilePath=${session.internal.contentFilePath}`,
         context: {
           id: session.id,
           slug: session.frontmatter.slug,

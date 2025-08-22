@@ -50,8 +50,6 @@ date: "2025-08-01"
 bookSlug: "related-book-slug"
 sessionNumber: 1
 attendees: ["نام۱", "نام۲"]
-keyDiscussions: ["موضوع۱", "موضوع۲"]
-nextActions: ["اقدام۱", "اقدام۲"]
 ---
 
 Session summary and discussion details...

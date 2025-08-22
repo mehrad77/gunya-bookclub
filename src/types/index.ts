@@ -23,19 +23,16 @@ export interface Book {
   };
 }
 
-export interface Session {
-  id: string;
+export interface SessionData {
   slug: string;
   title: string;
   date: string;
   bookSlug: string;
   sessionNumber: number;
-  attendees?: string[];
-  summary: string;
-  keyDiscussions?: string[];
-  nextActions?: string[];
+  attendees: string[];
+  status?: 'upcoming' | 'held' | 'cancelled';
 }
 
 export interface BookWithSessions extends Book {
-  sessions: Session[];
+  sessions: SessionData[];
 }

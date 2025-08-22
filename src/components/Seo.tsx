@@ -25,7 +25,7 @@ interface EventSchema {
     address?: string;
   };
   description?: string;
-  eventStatus?: "EventScheduled" | "EventRescheduled" | "EventCancelled";
+  eventStatus?: "EventScheduled" | "EventRescheduled" | "EventCancelled" | "EventCompleted";
   eventAttendanceMode?:
     | "OfflineEventAttendanceMode"
     | "OnlineEventAttendanceMode"
