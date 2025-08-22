@@ -178,6 +178,7 @@ export const query = graphql`
       frontmatter {
         title
         titleFarsi
+        slug
         author
         year
         language

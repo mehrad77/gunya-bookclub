@@ -139,6 +139,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
           <p className="text-gray-500 text-sm">
             نویسنده: {book.author}
           </p>
+          {renderLink()}
         </div>
       </div>
     </div>
