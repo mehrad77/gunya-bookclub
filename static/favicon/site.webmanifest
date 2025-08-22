@@ -1,0 +1,25 @@
+{
+  "name": "باشگاه کتابخوانی گونیا",
+  "short_name": "گونیا",
+  "description": "باشگاه کتابخوانی که هر هفته یک کتاب جدید مطالعه و بحث می‌کند",
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait-primary",
+  "lang": "fa",
+  "dir": "rtl"
+}

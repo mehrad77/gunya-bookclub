@@ -57,6 +57,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
           id
           frontmatter {
             slug
+            bookSlug
           }
           internal {
             contentFilePath
@@ -81,6 +82,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
         context: {
           id: session.id,
           slug: session.frontmatter.slug,
+          bookSlug: session.frontmatter.bookSlug,
         },
       });
     }

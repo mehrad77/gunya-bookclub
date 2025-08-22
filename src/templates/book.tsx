@@ -1,5 +1,7 @@
 import React from "react";
-import { graphql, Link, PageProps } from "gatsby";
+import { graphql, Link, PageProps, type HeadFC } from "gatsby";
+import Seo from "../components/Seo";
+import Logo from "../components/Logo";
 
 interface BookPageContext {
   id: string;
@@ -13,7 +15,7 @@ interface BookData {
       title: string;
       titleFarsi?: string;
       author: string;
-      year: number;
+      year: string;
       language: string;
       genre: string[];
       translator?: string;
@@ -49,133 +51,206 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
   const { frontmatter } = mdx;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
-        {/* Back to home */}
-        <Link 
-          to="/" 
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6"
-        >
-          ← بازگشت به صفحه اصلی
-        </Link>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+      <div className="max-w-5xl mx-auto px-6 py-12">
+        {/* Header with Logo and Back Navigation */}
+        <div className="flex items-center justify-between mb-8">
+          <Link 
+            to="/" 
+            className="minimal-button group"
+          >
+            <span className="ml-2 transition-transform group-hover:-translate-x-1">←</span>
+            بازگشت به صفحه اصلی
+          </Link>
+          
+          <Logo size="sm" />
+        </div>
 
         {/* Book Header */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <div className="flex flex-col md:flex-row gap-8">
-            {frontmatter.coverImage && (
-              <div className="md:w-1/3">
-                <img 
-                  src={frontmatter.coverImage} 
-                  alt={frontmatter.title}
-                  className="w-full rounded-lg shadow-md"
-                />
-              </div>
-            )}
-            
-            <div className="md:w-2/3">
-              <div className="mb-4">
-                <span className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
-                  کتاب {frontmatter.bookNumber}
-                </span>
-                <span className={`inline-block ml-2 text-sm px-3 py-1 rounded-full ${
-                  frontmatter.status === 'completed' ? 'bg-green-100 text-green-800' :
-                  frontmatter.status === 'current' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-gray-100 text-gray-800'
-                }`}>
-                  {frontmatter.status === 'completed' ? 'تکمیل شده' :
-                   frontmatter.status === 'current' ? 'در حال خواندن' : 'آینده'}
-                </span>
-              </div>
-
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {frontmatter.title}
-              </h1>
-              
-              {frontmatter.titleFarsi && (
-                <h2 className="text-xl text-gray-600 mb-4">
-                  {frontmatter.titleFarsi}
-                </h2>
+        <div className="card mb-12">
+          <div className="p-10">
+            <div className="flex flex-col lg:flex-row gap-10">
+              {frontmatter.coverImage && (
+                <div className="lg:w-1/3 flex justify-center lg:justify-start">
+                  <div className="relative">
+                    <img 
+                      src={frontmatter.coverImage} 
+                      alt={frontmatter.title}
+                      className="w-64 rounded-2xl shadow-2xl"
+                    />
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent"></div>
+                  </div>
+                </div>
               )}
+              
+              <div className="lg:w-2/3 space-y-6">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="status-badge bg-blue-50 text-blue-700 border border-blue-200">
+                    کتاب {frontmatter.bookNumber}
+                  </span>
+                  <span className={`status-badge ${
+                    frontmatter.status === 'completed' ? 'status-completed' :
+                    frontmatter.status === 'current' ? 'status-current' :
+                    'status-upcoming'
+                  }`}>
+                    {frontmatter.status === 'completed' ? 'تکمیل شده' :
+                     frontmatter.status === 'current' ? 'در حال خواندن' : 'آینده'}
+                  </span>
+                </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div><strong>✍️ نویسنده:</strong> {frontmatter.author}</div>
-                <div><strong>🗓️ سال انتشار:</strong> {frontmatter.year}</div>
-                <div><strong>🗣️ زبان:</strong> {frontmatter.language}</div>
-                <div><strong>📄 تعداد صفحات:</strong> {frontmatter.pages}</div>
-                {frontmatter.translator && (
-                  <div><strong>👤 مترجم:</strong> {frontmatter.translator}</div>
-                )}
-                <div><strong>🏷️ ژانر:</strong> {frontmatter.genre.join('، ')}</div>
+                <div className="space-y-3">
+                  <h1 className="text-4xl font-light text-gray-900 leading-tight">
+                    {frontmatter.title}
+                  </h1>
+                  
+                  {frontmatter.titleFarsi && (
+                    <h2 className="text-2xl font-light text-gray-600">
+                      {frontmatter.titleFarsi}
+                    </h2>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-400">✍️</span>
+                      <span className="font-medium text-gray-600">نویسنده:</span>
+                      <span className="text-gray-900">{frontmatter.author}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-400">🗓️</span>
+                      <span className="font-medium text-gray-600">سال انتشار:</span>
+                      <span className="text-gray-900">{frontmatter.year}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-400">🗣️</span>
+                      <span className="font-medium text-gray-600">زبان:</span>
+                      <span className="text-gray-900">{frontmatter.language}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-400">📄</span>
+                      <span className="font-medium text-gray-600">تعداد صفحات:</span>
+                      <span className="text-gray-900">{frontmatter.pages}</span>
+                    </div>
+                    {frontmatter.translator && (
+                      <div className="flex items-center gap-3">
+                        <span className="text-gray-400">👤</span>
+                        <span className="font-medium text-gray-600">مترجم:</span>
+                        <span className="text-gray-900">{frontmatter.translator}</span>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3">
+                      <span className="text-gray-400">🏷️</span>
+                      <span className="font-medium text-gray-600">ژانر:</span>
+                      <span className="text-gray-900">{frontmatter.genre.join('، ')}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Book Description */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h3 className="text-xl font-semibold mb-4">درباره کتاب</h3>
-          <div className="prose prose-lg max-w-none text-gray-700">
-            <p>{mdx.excerpt}</p>
+        <div className="card mb-12">
+          <div className="p-10">
+            <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
+              <span className="text-blue-500">📖</span>
+              درباره کتاب
+            </h3>
+            <div className="prose prose-lg text-gray-700">
+              <p className="text-lg leading-relaxed">{mdx.excerpt}</p>
+            </div>
           </div>
         </div>
 
         {/* Links */}
         {frontmatter.links && (
-          <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <h3 className="text-xl font-semibold mb-4">منابع و پیوندها</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {frontmatter.links.wikipediaFarsi && (
-                <a href={frontmatter.links.wikipediaFarsi} className="text-blue-600 hover:text-blue-800">
-                  🌐 ویکی‌پدیای فارسی
-                </a>
-              )}
-              {frontmatter.links.wikipediaEnglish && (
-                <a href={frontmatter.links.wikipediaEnglish} className="text-blue-600 hover:text-blue-800">
-                  🌐 ویکی‌پدیای انگلیسی
-                </a>
-              )}
-              {frontmatter.links.wikisource && (
-                <a href={frontmatter.links.wikisource} className="text-blue-600 hover:text-blue-800">
-                  📜 ویکی‌نبشته
-                </a>
-              )}
-              {frontmatter.links.goodreadsEnglish && (
-                <a href={frontmatter.links.goodreadsEnglish} className="text-blue-600 hover:text-blue-800">
-                  📚 گودریدز انگلیسی
-                </a>
-              )}
-              {frontmatter.links.goodreadsFarsi && (
-                <a href={frontmatter.links.goodreadsFarsi} className="text-blue-600 hover:text-blue-800">
-                  📚 گودریدز فارسی
-                </a>
-              )}
-              {frontmatter.links.audiobook && (
-                <a href={frontmatter.links.audiobook} className="text-blue-600 hover:text-blue-800">
-                  🎧 نسخه صوتی
-                </a>
-              )}
+          <div className="card mb-12">
+            <div className="p-10">
+              <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
+                <span className="text-purple-500">🔗</span>
+                منابع و پیوندها
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {frontmatter.links.wikipediaFarsi && (
+                  <a 
+                    href={frontmatter.links.wikipediaFarsi} 
+                    className="minimal-button justify-start hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
+                  >
+                    🌐 ویکی‌پدیای فارسی
+                  </a>
+                )}
+                {frontmatter.links.wikipediaEnglish && (
+                  <a 
+                    href={frontmatter.links.wikipediaEnglish} 
+                    className="minimal-button justify-start hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
+                  >
+                    🌐 ویکی‌پدیای انگلیسی
+                  </a>
+                )}
+                {frontmatter.links.wikisource && (
+                  <a 
+                    href={frontmatter.links.wikisource} 
+                    className="minimal-button justify-start hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200"
+                  >
+                    📜 ویکی‌نبشته
+                  </a>
+                )}
+                {frontmatter.links.goodreadsEnglish && (
+                  <a 
+                    href={frontmatter.links.goodreadsEnglish} 
+                    className="minimal-button justify-start hover:bg-green-50 hover:text-green-700 hover:border-green-200"
+                  >
+                    📚 گودریدز انگلیسی
+                  </a>
+                )}
+                {frontmatter.links.goodreadsFarsi && (
+                  <a 
+                    href={frontmatter.links.goodreadsFarsi} 
+                    className="minimal-button justify-start hover:bg-green-50 hover:text-green-700 hover:border-green-200"
+                  >
+                    📚 گودریدز فارسی
+                  </a>
+                )}
+                {frontmatter.links.audiobook && (
+                  <a 
+                    href={frontmatter.links.audiobook} 
+                    className="minimal-button justify-start hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200"
+                  >
+                    🎧 نسخه صوتی
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         )}
 
         {/* Related Sessions */}
         {relatedSessions.nodes.length > 0 && (
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <h3 className="text-xl font-semibold mb-4">جلسات مرتبط</h3>
-            <div className="space-y-4">
-              {relatedSessions.nodes.map((session) => (
-                <div key={session.frontmatter.slug} className="border-l-4 border-blue-500 pl-4">
-                  <Link 
-                    to={`/sessions/${session.frontmatter.slug}`}
-                    className="text-lg font-medium text-blue-600 hover:text-blue-800"
-                  >
-                    {session.frontmatter.title}
-                  </Link>
-                  <p className="text-sm text-gray-600">
-                    جلسه {session.frontmatter.sessionNumber} • {new Date(session.frontmatter.date).toLocaleDateString('fa-IR')}
-                  </p>
-                </div>
-              ))}
+          <div className="card">
+            <div className="p-10">
+              <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
+                <span className="text-green-500">💬</span>
+                جلسات مرتبط
+              </h3>
+              <div className="space-y-6">
+                {relatedSessions.nodes.map((session) => (
+                  <div key={session.frontmatter.slug} className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
+                    <Link 
+                      to={`/sessions/${session.frontmatter.slug}`}
+                      className="block text-xl font-medium text-blue-700 hover:text-blue-800 transition-colors duration-200"
+                    >
+                      {session.frontmatter.title}
+                    </Link>
+                    <p className="text-blue-600 font-light mt-2">
+                      جلسه {session.frontmatter.sessionNumber} • {new Date(session.frontmatter.date).toLocaleDateString('fa-IR')}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -229,5 +304,39 @@ export const query = graphql`
     }
   }
 `;
+
+export const Head: HeadFC<BookData, BookPageContext> = ({ data, location }) => {
+  const { mdx } = data;
+  const { frontmatter } = mdx;
+  
+  const bookTitle = frontmatter.titleFarsi || frontmatter.title;
+  const pageTitle = `${bookTitle} - ${frontmatter.author} | باشگاه کتابخوانی گونیا`;
+  const description = mdx.excerpt || `کتاب ${bookTitle} اثر ${frontmatter.author} - یکی از کتاب‌های مطالعه شده در باشگاه کتابخوانی گونیا`;
+  
+  return (
+    <Seo
+      title={pageTitle}
+      description={description}
+      pathname={location.pathname}
+      image={frontmatter.coverImage}
+      article={true}
+      publishedDate={frontmatter.year}
+      author={frontmatter.author}
+      bookSchema={{
+        name: frontmatter.title,
+        author: frontmatter.author,
+        bookEdition: frontmatter.translator ? `ترجمه ${frontmatter.translator}` : undefined,
+        datePublished: frontmatter.year,
+        sameAs: frontmatter.links ? Object.values(frontmatter.links).filter(Boolean) : undefined,
+        genre: frontmatter.genre,
+        language: frontmatter.language,
+        numberOfPages: frontmatter.pages,
+        translator: frontmatter.translator,
+        image: frontmatter.coverImage,
+        description: description
+      }}
+    />
+  );
+};
 
 export default BookTemplate;
