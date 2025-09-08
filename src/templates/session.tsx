@@ -5,6 +5,7 @@ import Seo from "../components/Seo";
 import Logo from "../components/Logo";
 import BookInfoCard from "../components/BookInfoCard";
 import StatusBadge from "../components/StatusBadge";
+import MeetingInfo from "../components/MeetingInfo";
 import { useTranslation } from "../locales";
 
 interface SessionPageContext {
@@ -36,6 +37,15 @@ interface SessionData {
       translator?: string;
       pages: string;
       coverImage?: string;
+    };
+  };
+  meetingInfo: {
+    frontmatter: {
+      clubName: string;
+      time: string;
+      timezone: string;
+      meetingInfo: string;
+      meetLink: string;
     };
   };
 }
@@ -81,7 +91,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
             <span className="ml-2 transition-transform group-hover:-translate-x-1">
               ←
             </span>
-            {t('common.backToHome')}
+            {t("common.backToHome")}
           </Link>
 
           <Logo size="sm" />
@@ -97,7 +107,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
                   <div className="flex items-center gap-3">
                     <StatusBadge status={sessionStatus} />
                     <span className="status-badge bg-gray-50 text-gray-700 border border-gray-200">
-                      {t('common.session')} {frontmatter.sessionNumber}
+                      {t("common.session")} {frontmatter.sessionNumber}
                     </span>
                     <span className="text-gray-400 text-sm">
                       {new Date(frontmatter.date).toLocaleDateString("fa-IR")}
@@ -114,7 +124,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
                   <div className="space-y-4">
                     <h3 className="font-medium text-gray-900 text-lg flex items-center gap-3">
                       <span className="text-blue-500">👥</span>
-                      {t('session.attendees')}
+                      {t("session.attendees")}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {frontmatter.attendees.map((attendee, index) => (
@@ -128,6 +138,14 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
                       ))}
                     </div>
                   </div>
+                )}
+
+                {/* Meeting Information - Only for upcoming sessions */}
+                {sessionStatus === "upcoming" && data.meetingInfo && (
+                  <MeetingInfo
+                    meetingInfo={data.meetingInfo.frontmatter}
+                    sessionDate={frontmatter.date}
+                  />
                 )}
               </div>
 
@@ -146,7 +164,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
           <div className="p-10">
             <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
               <span className="text-orange-500">📝</span>
-              {t('session.sessionContent')}
+              {t("session.sessionContent")}
             </h3>
             <div className="prose prose-lg max-w-none text-gray-700">
               <MDXProvider>{children}</MDXProvider>
@@ -190,6 +208,17 @@ export const query = graphql`
         coverImage
       }
     }
+    meetingInfo: mdx(
+      internal: { contentFilePath: { regex: "/constants/upcoming-meeting/" } }
+    ) {
+      frontmatter {
+        clubName
+        time
+        timezone
+        meetingInfo
+        meetLink
+      }
+    }
   }
 `;
 
@@ -201,12 +230,12 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
   const { frontmatter } = mdx;
   const { t } = useTranslation();
 
-  const sessionTitle = `${frontmatter.title} | ${t('seo.organizationName')}`;
+  const sessionTitle = `${frontmatter.title} | ${t("seo.organizationName")}`;
   const description =
     mdx.excerpt ||
-    `${t('session.sessionNumber')} ${
-      frontmatter.sessionNumber
-    } ${t('seo.organizationName')} - ${t('session.sessionDescription')} ${
+    `${t("session.sessionNumber")} ${frontmatter.sessionNumber} ${t(
+      "seo.organizationName"
+    )} - ${t("session.sessionDescription")} ${
       book?.frontmatter?.title || frontmatter.bookSlug
     }`;
 
@@ -248,7 +277,7 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
         eventStatus: getEventStatus(),
         eventAttendanceMode: "OfflineEventAttendanceMode",
         organizer: {
-          name: t('seo.organizationName'),
+          name: t("seo.organizationName"),
           url: "https://bookclub.shab.boo",
         },
         ...(book && {
@@ -261,9 +290,9 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
             numberOfPages: book.frontmatter.pages,
             translator: book.frontmatter.translator,
             image: book.frontmatter.coverImage,
-            description: `${t('common.book')} ${
+            description: `${t("common.book")} ${
               book.frontmatter.titleFarsi || book.frontmatter.title
-            } ${t('book.bookBy')} ${book.frontmatter.author}`,
+            } ${t("book.bookBy")} ${book.frontmatter.author}`,
           },
         }),
       }}

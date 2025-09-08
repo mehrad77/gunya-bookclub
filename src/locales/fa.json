@@ -52,7 +52,8 @@
     "attendees": "شرکت‌کنندگان",
     "sessionContent": "محتوای جلسه",
     "sessionNumber": "جلسه",
-    "sessionDescription": "بحث در مورد کتاب"
+    "sessionDescription": "بحث در مورد کتاب",
+    "sessionStarted": "جلسه شروع شده است!"
   },
   "links": {
     "wikipediaFarsi": "ویکی‌پدیای فارسی",

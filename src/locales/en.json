@@ -52,7 +52,8 @@
     "attendees": "Attendees",
     "sessionContent": "Session Content",
     "sessionNumber": "Session",
-    "sessionDescription": "Discussion about the book"
+    "sessionDescription": "Discussion about the book",
+    "sessionStarted": "Session has started!"
   },
   "links": {
     "wikipediaFarsi": "Persian Wikipedia",

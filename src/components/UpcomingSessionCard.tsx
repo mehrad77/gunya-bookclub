@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import { useTranslation } from '../locales';
+import MeetingInfo from './MeetingInfo';
 
 interface SessionInfo {
   slug: string;
@@ -18,7 +19,7 @@ interface BookInfo {
   coverImage?: string;
 }
 
-interface MeetingInfo {
+interface MeetingData {
   clubName: string;
   time: string;
   timezone: string;
@@ -29,7 +30,7 @@ interface MeetingInfo {
 interface UpcomingSessionCardProps {
   session: SessionInfo;
   relatedBook?: BookInfo;
-  meetingInfo?: MeetingInfo;
+  meetingInfo?: MeetingData;
   className?: string;
 }
 
@@ -82,27 +83,10 @@ const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({
 
               {/* Meeting Information */}
               {meetingInfo && (
-                <div className="space-y-3">
-                  <div className="text-sm space-y-2">
-                    <div className="flex items-center gap-2">
-                      🕐 {meetingInfo.time}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      🌍 {t('common.timezone')}: {meetingInfo.timezone}
-                    </div>
-                    <div className="flex items-start gap-2">
-                      🔗 
-                      <a 
-                        href={meetingInfo.meetLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800 underline break-all"
-                      >
-                        <span className="text-xs opacity-70"> ↗ </span> {meetingInfo.meetLink}
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                <MeetingInfo 
+                  meetingInfo={meetingInfo} 
+                  sessionDate={session.date}
+                />
               )}
             </div>
 
