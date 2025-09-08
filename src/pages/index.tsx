@@ -1,12 +1,11 @@
 import * as React from "react";
-import { graphql, Link, PageProps, HeadFC } from "gatsby";
+import { graphql, PageProps, HeadFC } from "gatsby";
 import Seo from "../components/Seo";
 import Logo from "../components/Logo";
 import BookCard from "../components/BookCard";
 import SessionCard from "../components/SessionCard";
-import BookInfoCard from "../components/BookInfoCard";
-import StatusBadge from "../components/StatusBadge";
 import UpcomingSessionCard from "../components/UpcomingSessionCard";
+import { useTranslation } from "../locales";
 
 interface IndexPageData {
   allBooks: {
@@ -58,6 +57,7 @@ interface IndexPageData {
 
 const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
   const { allBooks, allSessions, upcomingMeeting, socialMedia } = data;
+  const { t } = useTranslation();
 
   // Sort books by status and number
   const sortedBooks = [...allBooks.nodes].sort((a, b) => {
@@ -106,10 +106,10 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
             <Logo size="lg" className="justify-center" />
             <div className="space-y-3">
               <h1 className="text-5xl font-light text-gray-900 tracking-tight">
-                باشگاه کتابخوانی گونیا
+                {t('home.title')}
               </h1>
               <p className="text-gray-600 text-lg font-light">
-                با هم، هر هفته، یک کتاب
+                {t('home.subtitle')}
               </p>
               
               {/* Social Media Links */}
@@ -142,7 +142,7 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
         {upcomingSessions.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center space-x-reverse space-x-4 mb-4">
-              <h2 className="text-3xl font-light text-gray-900">نشست پیش رو</h2>
+              <h2 className="text-3xl font-light text-gray-900">{t('home.upcomingSession')}</h2>
               <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
             </div>
 
@@ -170,7 +170,7 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
           {/* Books Section */}
           <section className="space-y-8">
             <div className="flex items-center space-x-reverse space-x-4">
-              <h2 className="text-3xl font-light text-gray-900">کتاب‌ها</h2>
+              <h2 className="text-3xl font-light text-gray-900">{t('home.books')}</h2>
               <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
             </div>
 
@@ -187,7 +187,7 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
           {/* Sessions Section */}
           <section className="space-y-8">
             <div className="flex items-center space-x-reverse space-x-4">
-              <h2 className="text-3xl font-light text-gray-900">جلسات گذشته</h2>
+              <h2 className="text-3xl font-light text-gray-900">{t('home.pastSessions')}</h2>
               <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
             </div>
 
@@ -217,17 +217,18 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
 export default IndexPage;
 
 export const Head: HeadFC<IndexPageData> = ({ data, location }) => {
+  const { t } = useTranslation();
+  
   return (
     <Seo
-      title="باشگاه کتابخوانی گونیا - هر هفته، یک کتاب جدید"
-      description="باشگاه کتابخوانی گونیا - مکانی برای عاشقان کتاب که هر هفته یک کتاب جدید مطالعه و در مورد آن بحث می‌کنیم. به ما بپیوندید و تجربه خواندن خود را به اشتراک بگذارید."
+      title={t('seo.homeTitle')}
+      description={t('seo.homeDescription')}
       pathname={location.pathname}
       organizationSchema={{
-        name: "باشگاه کتابخوانی گونیا",
+        name: t('seo.organizationName'),
         url: "https://bookclub.shab.boo",
         logo: "https://bookclub.shab.boo/favicon/android-chrome-512x512.png",
-        description:
-          "باشگاه کتابخوانی که هر هفته یک کتاب جدید مطالعه و بحث می‌کند",
+        description: t('seo.organizationDescription'),
         foundingDate: "2024",
         address: {
           addressCountry: "IR",

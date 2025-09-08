@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
+import { useTranslation } from '../locales';
 
 interface BookInfo {
   slug?: string;
@@ -23,6 +24,8 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
   variant = 'default',
   className = ''
 }) => {
+  const { t } = useTranslation();
+  
   const renderCover = () => {
     if (!book.coverImage) return null;
     
@@ -78,13 +81,13 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
     
     return (
       <div className={`space-y-1 ${textClass} text-blue-600`}>
-        <p>نویسنده: {book.author}</p>
+        <p>{t('common.author')}: {book.author}</p>
         {book.translator && (
-          <p>مترجم: {book.translator}</p>
+          <p>{t('common.translator')}: {book.translator}</p>
         )}
-        <p>سال انتشار: {book.year}</p>
+        <p>{t('common.yearPublished')}: {book.year}</p>
         {book.pages && (
-          <p>تعداد صفحات: {book.pages}</p>
+          <p>{t('common.pages')}: {book.pages}</p>
         )}
       </div>
     );
@@ -99,7 +102,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
           to={`/books/${book.slug}`}
           className={`inline-flex items-center text-blue-700 hover:text-blue-800 transition-colors duration-200 font-medium ${linkClass}`}
         >
-          مشاهده جزئیات کتاب
+          {t('common.viewBookDetails')}
           <span className="mr-2">←</span>
         </Link>
       </div>
@@ -114,7 +117,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
           <div className="space-y-3 text-center">
             <div className="flex justify-center">
               <span className="status-badge bg-blue-100 text-blue-700 border border-blue-200">
-                📚 کتاب مرتبط
+                📚 {t('common.relatedBook')}
               </span>
             </div>
             <div className="space-y-2">
@@ -137,7 +140,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
           {renderTitle()}
           {renderSubtitle()}
           <p className="text-gray-500 text-sm">
-            نویسنده: {book.author}
+            {t('common.author')}: {book.author}
           </p>
           {renderLink()}
         </div>

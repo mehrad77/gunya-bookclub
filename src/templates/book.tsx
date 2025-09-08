@@ -3,6 +3,7 @@ import { graphql, Link, PageProps, type HeadFC } from "gatsby";
 import Seo from "../components/Seo";
 import Logo from "../components/Logo";
 import SessionCard from "../components/SessionCard";
+import { useTranslation } from "../locales";
 
 interface BookPageContext {
   id: string;
@@ -51,6 +52,7 @@ interface BookData {
 const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) => {
   const { mdx, relatedSessions } = data;
   const { frontmatter } = mdx;
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
@@ -62,7 +64,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
             className="minimal-button group"
           >
             <span className="ml-2 transition-transform group-hover:-translate-x-1">←</span>
-            بازگشت به صفحه اصلی
+            {t('common.backToHome')}
           </Link>
           
           <Logo size="sm" />
@@ -88,15 +90,15 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
               <div className="lg:w-2/3 space-y-6">
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="status-badge bg-blue-50 text-blue-700 border border-blue-200">
-                    کتاب {frontmatter.bookNumber}
+                    {t('common.book')} {frontmatter.bookNumber}
                   </span>
                   <span className={`status-badge ${
                     frontmatter.status === 'completed' ? 'status-completed' :
                     frontmatter.status === 'current' ? 'status-current' :
                     'status-upcoming'
                   }`}>
-                    {frontmatter.status === 'completed' ? 'تکمیل شده' :
-                     frontmatter.status === 'current' ? 'در حال خواندن' : 'آینده'}
+                    {frontmatter.status === 'completed' ? t('status.completed') :
+                     frontmatter.status === 'current' ? t('status.current') : t('status.upcoming')}
                   </span>
                 </div>
 
@@ -116,36 +118,36 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <span className="text-gray-400">✍️</span>
-                      <span className="font-medium text-gray-600">نویسنده:</span>
+                      <span className="font-medium text-gray-600">{t('common.author')}:</span>
                       <span className="text-gray-900">{frontmatter.author}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-gray-400">🗓️</span>
-                      <span className="font-medium text-gray-600">سال انتشار:</span>
+                      <span className="font-medium text-gray-600">{t('common.yearPublished')}:</span>
                       <span className="text-gray-900">{frontmatter.year}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-gray-400">🗣️</span>
-                      <span className="font-medium text-gray-600">زبان:</span>
+                      <span className="font-medium text-gray-600">{t('common.language')}:</span>
                       <span className="text-gray-900">{frontmatter.language}</span>
                     </div>
                   </div>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <span className="text-gray-400">📄</span>
-                      <span className="font-medium text-gray-600">تعداد صفحات:</span>
+                      <span className="font-medium text-gray-600">{t('common.pages')}:</span>
                       <span className="text-gray-900">{frontmatter.pages}</span>
                     </div>
                     {frontmatter.translator && (
                       <div className="flex items-center gap-3">
                         <span className="text-gray-400">👤</span>
-                        <span className="font-medium text-gray-600">مترجم:</span>
+                        <span className="font-medium text-gray-600">{t('common.translator')}:</span>
                         <span className="text-gray-900">{frontmatter.translator}</span>
                       </div>
                     )}
                     <div className="flex items-center gap-3">
                       <span className="text-gray-400">🏷️</span>
-                      <span className="font-medium text-gray-600">ژانر:</span>
+                      <span className="font-medium text-gray-600">{t('common.genre')}:</span>
                       <span className="text-gray-900">{frontmatter.genre.join('، ')}</span>
                     </div>
                   </div>
@@ -160,7 +162,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
           <div className="p-10">
             <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
               <span className="text-blue-500">📖</span>
-              درباره کتاب
+              {t('book.aboutBook')}
             </h3>
             <div className="prose prose-lg text-gray-700">
               <p className="text-lg leading-relaxed">{mdx.excerpt}</p>
@@ -174,7 +176,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
             <div className="p-10">
               <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
                 <span className="text-purple-500">🔗</span>
-                منابع و پیوندها
+                {t('book.linksAndResources')}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {frontmatter.links.wikipediaFarsi && (
@@ -182,7 +184,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                     href={frontmatter.links.wikipediaFarsi} 
                     className="minimal-button justify-start hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
                   >
-                    🌐 ویکی‌پدیای فارسی
+                    🌐 {t('links.wikipediaFarsi')}
                   </a>
                 )}
                 {frontmatter.links.wikipediaEnglish && (
@@ -190,7 +192,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                     href={frontmatter.links.wikipediaEnglish} 
                     className="minimal-button justify-start hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
                   >
-                    🌐 ویکی‌پدیای انگلیسی
+                    🌐 {t('links.wikipediaEnglish')}
                   </a>
                 )}
                 {frontmatter.links.wikisource && (
@@ -198,7 +200,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                     href={frontmatter.links.wikisource} 
                     className="minimal-button justify-start hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200"
                   >
-                    📜 ویکی‌نبشته
+                    📜 {t('links.wikisource')}
                   </a>
                 )}
                 {frontmatter.links.goodreadsEnglish && (
@@ -206,7 +208,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                     href={frontmatter.links.goodreadsEnglish} 
                     className="minimal-button justify-start hover:bg-green-50 hover:text-green-700 hover:border-green-200"
                   >
-                    📚 گودریدز انگلیسی
+                    📚 {t('links.goodreadsEnglish')}
                   </a>
                 )}
                 {frontmatter.links.goodreadsFarsi && (
@@ -214,7 +216,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                     href={frontmatter.links.goodreadsFarsi} 
                     className="minimal-button justify-start hover:bg-green-50 hover:text-green-700 hover:border-green-200"
                   >
-                    📚 گودریدز فارسی
+                    📚 {t('links.goodreadsFarsi')}
                   </a>
                 )}
                 {frontmatter.links.audiobook && (
@@ -222,7 +224,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                     href={frontmatter.links.audiobook} 
                     className="minimal-button justify-start hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200"
                   >
-                    🎧 نسخه صوتی
+                    🎧 {t('links.audiobook')}
                   </a>
                 )}
               </div>
@@ -236,7 +238,7 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
             <div className="p-10">
               <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
                 <span className="text-green-500">💬</span>
-                جلسات مرتبط
+                {t('book.relatedSessions')}
               </h3>
               <div className="space-y-6">
                 {relatedSessions.nodes.map((session) => (
@@ -305,10 +307,11 @@ export const query = graphql`
 export const Head: HeadFC<BookData, BookPageContext> = ({ data, location }) => {
   const { mdx } = data;
   const { frontmatter } = mdx;
+  const { t } = useTranslation();
   
   const bookTitle = frontmatter.titleFarsi || frontmatter.title;
-  const pageTitle = `${bookTitle} - ${frontmatter.author} | باشگاه کتابخوانی گونیا`;
-  const description = mdx.excerpt || `کتاب ${bookTitle} اثر ${frontmatter.author} - یکی از کتاب‌های مطالعه شده در باشگاه کتابخوانی گونیا`;
+  const pageTitle = `${bookTitle} - ${frontmatter.author} | ${t('seo.organizationName')}`;
+  const description = mdx.excerpt || `${t('common.book')} ${bookTitle} ${t('book.bookBy')} ${frontmatter.author} - ${t('book.bookDescription')}`;
   
   return (
     <Seo
@@ -322,7 +325,7 @@ export const Head: HeadFC<BookData, BookPageContext> = ({ data, location }) => {
       bookSchema={{
         name: frontmatter.title,
         author: frontmatter.author,
-        bookEdition: frontmatter.translator ? `ترجمه ${frontmatter.translator}` : undefined,
+        bookEdition: frontmatter.translator ? `${t('book.translationBy')} ${frontmatter.translator}` : undefined,
         datePublished: frontmatter.year,
         sameAs: frontmatter.links ? Object.values(frontmatter.links).filter(Boolean) : undefined,
         genre: frontmatter.genre,

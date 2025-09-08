@@ -1,0 +1,75 @@
+{
+  "common": {
+    "book": "Book",
+    "session": "Session",
+    "author": "Author",
+    "translator": "Translator",
+    "yearPublished": "Year Published",
+    "language": "Language",
+    "pages": "Number of Pages",
+    "genre": "Genre",
+    "backToHome": "Back to Home",
+    "viewBookDetails": "View Book Details",
+    "relatedBook": "Related Book",
+    "timezone": "Timezone"
+  },
+  "status": {
+    "completed": "Completed",
+    "current": "Currently Reading",
+    "upcoming": "Upcoming",
+    "held": "Held",
+    "cancelled": "Cancelled",
+    "unknown": "Unknown"
+  },
+  "logo": {
+    "altText": "Gunya Book Club Logo",
+    "title": "Gunya Book Club",
+    "subtitle": "Together, every week, one book"
+  },
+  "home": {
+    "title": "Gunya Book Club",
+    "subtitle": "Together, every week, one book",
+    "upcomingSession": "Upcoming Session",
+    "books": "Books",
+    "pastSessions": "Past Sessions"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "message": "Sorry, the page you are looking for does not exist.",
+    "backButton": "Back to Home",
+    "suggestion": "Or go back to the home page and find your favorite book"
+  },
+  "book": {
+    "aboutBook": "About the Book",
+    "linksAndResources": "Links and Resources",
+    "relatedSessions": "Related Sessions",
+    "pageTitle": "Book",
+    "bookBy": "by",
+    "bookDescription": "One of the books studied in Gunya Book Club",
+    "translationBy": "Translation"
+  },
+  "session": {
+    "attendees": "Attendees",
+    "sessionContent": "Session Content",
+    "sessionNumber": "Session",
+    "sessionDescription": "Discussion about the book"
+  },
+  "links": {
+    "wikipediaFarsi": "Persian Wikipedia",
+    "wikipediaEnglish": "English Wikipedia",
+    "wikisource": "Wikisource",
+    "goodreadsEnglish": "English Goodreads",
+    "goodreadsFarsi": "Persian Goodreads",
+    "audiobook": "Audiobook"
+  },
+  "seo": {
+    "organizationName": "Gunya Book Club",
+    "organizationDescription": "A book club that reads and discusses a new book every week",
+    "siteName": "Gunya Book Club",
+    "defaultAuthor": "Gunya Book Club",
+    "homeTitle": "Gunya Book Club - Every week, a new book",
+    "homeDescription": "Gunya Book Club - A place for book lovers who read and discuss a new book every week. Join us and share your reading experience.",
+    "notFoundTitle": "Page Not Found - Gunya Book Club",
+    "notFoundDescription": "Sorry, the page you are looking for does not exist. Go back to the home page and find your favorite book."
+  }
+}

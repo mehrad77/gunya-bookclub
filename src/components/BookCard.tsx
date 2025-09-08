@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import StatusBadge from './StatusBadge';
+import { useTranslation } from '../locales';
 
 interface BookInfo {
   slug: string;
@@ -18,6 +19,8 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, className = '' }) => {
+  const { t } = useTranslation();
+  
   return (
     <div className={`card card-hover group ${className}`}>
       <div className="p-8">
@@ -35,7 +38,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, className = '' }) => {
           <div className="flex-1 space-y-4">
             <div className="flex items-center gap-3">
               <span className="status-badge bg-gray-50 text-gray-600 border border-gray-200">
-                کتاب {book.bookNumber}
+                {t('common.book')} {book.bookNumber}
               </span>
               <StatusBadge status={book.status} type="book" />
             </div>
@@ -56,7 +59,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, className = '' }) => {
             </div>
 
             <p className="text-gray-400 text-sm font-light">
-              نویسنده: {book.author}
+              {t('common.author')}: {book.author}
             </p>
           </div>
         </div>

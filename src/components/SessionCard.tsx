@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 import StatusBadge from './StatusBadge';
+import { useTranslation } from '../locales';
 
 interface SessionInfo {
   slug: string;
@@ -28,6 +29,8 @@ const SessionCard: React.FC<SessionCardProps> = ({
   variant = 'default',
   className = ''
 }) => {
+  const { t } = useTranslation();
+  
   // Helper function to get session status
   const getSessionStatus = () => {
     const sessionDate = new Date(session.date);
@@ -52,7 +55,7 @@ const SessionCard: React.FC<SessionCardProps> = ({
       <span className={`status-badge bg-gray-50 text-gray-700 border border-gray-200 ${
         variant === 'compact' ? 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium' : ''
       }`}>
-        جلسه {session.sessionNumber}
+        {t('common.session')} {session.sessionNumber}
       </span>
     </div>
   );

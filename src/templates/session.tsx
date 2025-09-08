@@ -5,6 +5,7 @@ import Seo from "../components/Seo";
 import Logo from "../components/Logo";
 import BookInfoCard from "../components/BookInfoCard";
 import StatusBadge from "../components/StatusBadge";
+import { useTranslation } from "../locales";
 
 interface SessionPageContext {
   id: string;
@@ -45,6 +46,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
 }) => {
   const { mdx } = data;
   const { frontmatter } = mdx;
+  const { t } = useTranslation();
 
   // Helper function to get session status
   const getSessionStatus = () => {
@@ -79,7 +81,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
             <span className="ml-2 transition-transform group-hover:-translate-x-1">
               ←
             </span>
-            بازگشت به صفحه اصلی
+            {t('common.backToHome')}
           </Link>
 
           <Logo size="sm" />
@@ -95,7 +97,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
                   <div className="flex items-center gap-3">
                     <StatusBadge status={sessionStatus} />
                     <span className="status-badge bg-gray-50 text-gray-700 border border-gray-200">
-                      جلسه {frontmatter.sessionNumber}
+                      {t('common.session')} {frontmatter.sessionNumber}
                     </span>
                     <span className="text-gray-400 text-sm">
                       {new Date(frontmatter.date).toLocaleDateString("fa-IR")}
@@ -112,7 +114,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
                   <div className="space-y-4">
                     <h3 className="font-medium text-gray-900 text-lg flex items-center gap-3">
                       <span className="text-blue-500">👥</span>
-                      شرکت‌کنندگان
+                      {t('session.attendees')}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {frontmatter.attendees.map((attendee, index) => (
@@ -144,7 +146,7 @@ const SessionTemplate: React.FC<PageProps<SessionData, SessionPageContext>> = ({
           <div className="p-10">
             <h3 className="text-2xl font-light text-gray-900 mb-6 flex items-center gap-3">
               <span className="text-orange-500">📝</span>
-              محتوای جلسه
+              {t('session.sessionContent')}
             </h3>
             <div className="prose prose-lg max-w-none text-gray-700">
               <MDXProvider>{children}</MDXProvider>
@@ -197,13 +199,14 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
 }) => {
   const { mdx, book } = data;
   const { frontmatter } = mdx;
+  const { t } = useTranslation();
 
-  const sessionTitle = `${frontmatter.title} | باشگاه کتابخوانی گونیا`;
+  const sessionTitle = `${frontmatter.title} | ${t('seo.organizationName')}`;
   const description =
     mdx.excerpt ||
-    `جلسه ${
+    `${t('session.sessionNumber')} ${
       frontmatter.sessionNumber
-    } باشگاه کتابخوانی گونیا - بحث در مورد کتاب ${
+    } ${t('seo.organizationName')} - ${t('session.sessionDescription')} ${
       book?.frontmatter?.title || frontmatter.bookSlug
     }`;
 
@@ -245,7 +248,7 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
         eventStatus: getEventStatus(),
         eventAttendanceMode: "OfflineEventAttendanceMode",
         organizer: {
-          name: "باشگاه کتابخوانی گونیا",
+          name: t('seo.organizationName'),
           url: "https://bookclub.shab.boo",
         },
         ...(book && {
@@ -258,9 +261,9 @@ export const Head: HeadFC<SessionData, SessionPageContext> = ({
             numberOfPages: book.frontmatter.pages,
             translator: book.frontmatter.translator,
             image: book.frontmatter.coverImage,
-            description: `کتاب ${
+            description: `${t('common.book')} ${
               book.frontmatter.titleFarsi || book.frontmatter.title
-            } اثر ${book.frontmatter.author}`,
+            } ${t('book.bookBy')} ${book.frontmatter.author}`,
           },
         }),
       }}

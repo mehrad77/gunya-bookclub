@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'gatsby';
+import { useTranslation } from '../locales';
 
 interface SessionInfo {
   slug: string;
@@ -38,6 +39,8 @@ const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({
   meetingInfo,
   className = ''
 }) => {
+  const { t } = useTranslation();
+  
   return (
     <div
       className={`w-full card card-hover group bg-gradient-to-br from-blue-50 via-white to-purple-50 border-2 border-blue-200 ${className}`}
@@ -53,10 +56,10 @@ const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <span className="status-badge bg-blue-100 text-blue-800 border border-blue-300 text-lg px-4 py-2">
-                  آینده
+                  {t('status.upcoming')}
                 </span>
                 <span className="status-badge bg-gray-100 text-gray-700 border border-gray-300 text-lg px-4 py-2">
-                  جلسه {session.sessionNumber}
+                  {t('common.session')} {session.sessionNumber}
                 </span>
               </div>
 
@@ -85,7 +88,7 @@ const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({
                       🕐 {meetingInfo.time}
                     </div>
                     <div className="flex items-center gap-2">
-                      🌍 منطقه زمانی: {meetingInfo.timezone}
+                      🌍 {t('common.timezone')}: {meetingInfo.timezone}
                     </div>
                     <div className="flex items-start gap-2">
                       🔗 
@@ -132,7 +135,7 @@ const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({
                       </p>
                     )}
                     <p className="text-gray-500 text-sm">
-                      نویسنده: {relatedBook.author}
+                      {t('common.author')}: {relatedBook.author}
                     </p>
                   </div>
                 </div>

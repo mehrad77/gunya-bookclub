@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "../locales";
 
 interface BookSchema {
   name: string;
@@ -69,17 +70,6 @@ interface SeoProps {
   lang?: string;
 }
 
-const defaultOrganization: OrganizationSchema = {
-  name: "باشگاه کتابخوانی گونیا",
-  url: "https://bookclub.shab.boo",
-  logo: "https://bookclub.shab.boo/favicon/android-chrome-512x512.png",
-  description: "باشگاه کتابخوانی که هر هفته یک کتاب جدید مطالعه و بحث می‌کند",
-  foundingDate: "2024",
-  address: {
-    addressCountry: "IR",
-  },
-};
-
 const Seo: React.FC<SeoProps> = ({
   title,
   description,
@@ -88,12 +78,25 @@ const Seo: React.FC<SeoProps> = ({
   article = false,
   bookSchema,
   eventSchema,
-  organizationSchema = defaultOrganization,
+  organizationSchema,
   publishedDate,
   modifiedDate,
-  author = "باشگاه کتابخوانی گونیا",
+  author,
   lang = "fa",
 }) => {
+  const { t } = useTranslation();
+  const finalOrganizationSchema = organizationSchema || {
+    name: t('seo.organizationName'),
+    url: "https://bookclub.shab.boo",
+    logo: "https://bookclub.shab.boo/favicon/android-chrome-512x512.png",
+    description: t('seo.organizationDescription'),
+    foundingDate: "2024",
+    address: {
+      addressCountry: "IR",
+    },
+  };
+  const finalAuthor = author || t('seo.defaultAuthor');
+  
   const siteUrl = "https://bookclub.shab.boo";
   const fullUrl = `${siteUrl}${pathname}`;
   const defaultImage = `${siteUrl}/favicon/android-chrome-512x512.png`;
@@ -122,8 +125,8 @@ const Seo: React.FC<SeoProps> = ({
     ...(book.description && { description: book.description }),
     publisher: {
       "@type": "Organization",
-      name: organizationSchema.name,
-      url: organizationSchema.url,
+      name: finalOrganizationSchema.name,
+      url: finalOrganizationSchema.url,
     },
   });
 
@@ -147,8 +150,8 @@ const Seo: React.FC<SeoProps> = ({
     }`,
     organizer: {
       "@type": "Organization",
-      name: event.organizer?.name || organizationSchema.name,
-      url: event.organizer?.url || organizationSchema.url,
+      name: event.organizer?.name || finalOrganizationSchema.name,
+      url: event.organizer?.url || finalOrganizationSchema.url,
     },
     ...(event.about && { about: generateBookSchema(event.about) }),
   });
@@ -175,7 +178,7 @@ const Seo: React.FC<SeoProps> = ({
   const jsonLdSchemas = [];
 
   // Always include organization schema
-  jsonLdSchemas.push(generateOrganizationSchema(organizationSchema));
+  jsonLdSchemas.push(generateOrganizationSchema(finalOrganizationSchema));
 
   // Add book schema if provided
   if (bookSchema) {
@@ -200,7 +203,7 @@ const Seo: React.FC<SeoProps> = ({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={seoImage} />
       <meta property="og:image:alt" content={title} />
-      <meta property="og:site_name" content="باشگاه کتابخوانی گونیا" />
+      <meta property="og:site_name" content={t('seo.siteName')} />
       <meta property="og:locale" content="fa_IR" />
 
       {/* Twitter Card */}
@@ -217,12 +220,12 @@ const Seo: React.FC<SeoProps> = ({
       {article && modifiedDate && (
         <meta property="article:modified_time" content={modifiedDate} />
       )}
-      {article && <meta property="article:author" content={author} />}
+      {article && <meta property="article:author" content={finalAuthor} />}
 
       {/* Additional SEO meta tags */}
       <meta name="robots" content="index, follow" />
       <meta name="googlebot" content="index, follow" />
-      <meta name="author" content={author} />
+      <meta name="author" content={finalAuthor} />
       <link rel="canonical" href={fullUrl} />
 
       {/* Favicon and App Icons */}
