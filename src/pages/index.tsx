@@ -43,10 +43,21 @@ interface IndexPageData {
       meetLink: string;
     };
   };
+  socialMedia: {
+    frontmatter: {
+      socialMedia: Array<{
+        name: string;
+        nameFarsi: string;
+        url: string;
+        icon: string;
+        platform: string;
+      }>;
+    };
+  };
 }
 
 const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
-  const { allBooks, allSessions, upcomingMeeting } = data;
+  const { allBooks, allSessions, upcomingMeeting, socialMedia } = data;
 
   // Sort books by status and number
   const sortedBooks = [...allBooks.nodes].sort((a, b) => {
@@ -98,8 +109,28 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
                 باشگاه کتابخوانی گونیا
               </h1>
               <p className="text-gray-600 text-lg font-light">
-                هر هفته، یک کتاب جدید
+                با هم، هر هفته، یک کتاب
               </p>
+              
+              {/* Social Media Links */}
+              {socialMedia?.frontmatter?.socialMedia && (
+                <div className="flex justify-center items-center gap-4 text-sm">
+                  {socialMedia.frontmatter.socialMedia.map((social) => (
+                    <a
+                      key={social.platform}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors duration-200 underline decoration-dotted underline-offset-8 hover:decoration-solid"
+                      title={social.nameFarsi}
+                    >
+                      <span><span className="text-xs opacity-70"> ↗ </span>{social.nameFarsi}</span>
+                      
+                    </a>
+                  ))}
+                </div>
+              )}
+              
               <div className="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
             </div>
           </div>
@@ -251,6 +282,19 @@ export const query = graphql`
         timezone
         meetingInfo
         meetLink
+      }
+    }
+    socialMedia: mdx(
+      internal: { contentFilePath: { regex: "/constants/social-media/" } }
+    ) {
+      frontmatter {
+        socialMedia {
+          name
+          nameFarsi
+          url
+          icon
+          platform
+        }
       }
     }
   }
