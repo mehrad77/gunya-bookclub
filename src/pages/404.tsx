@@ -8,12 +8,11 @@ const NotFoundPage: React.FC<PageProps> = () => {
   const { t } = useTranslation();
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-8 px-6">
         <Logo size="xl" className="justify-center" />
         
         <div className="space-y-4">
-          <h1 className="text-8xl font-extralight text-gradient">۴۰۴</h1>
           <h2 className="text-3xl font-light text-gray-800">
             {t('notFound.title')}
           </h2>

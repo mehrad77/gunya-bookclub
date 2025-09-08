@@ -50,7 +50,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
       return (
         <Link
           to={`/books/${book.slug}`}
-          className={`block font-medium text-blue-700 hover:text-blue-800 transition-colors duration-200 ${titleClass}`}
+          className={`block font-medium internal-link ${titleClass}`}
         >
           📚 {displayTitle}
         </Link>
@@ -58,7 +58,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
     }
     
     return (
-      <h3 className={`font-medium text-blue-700 ${titleClass}`}>
+      <h3 className={`font-medium text-amber-900 ${titleClass}`}>
         📚 {displayTitle}
       </h3>
     );
@@ -70,7 +70,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
     const subtitleClass = variant === 'compact' ? 'text-xs' : 'text-sm';
     
     return (
-      <p className={`text-blue-600 ${subtitleClass}`}>
+      <p className={`text-gray-800 font-light ${subtitleClass}`}>
         {book.title}
       </p>
     );
@@ -100,7 +100,7 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
       <div className="pt-2">
         <Link 
           to={`/books/${book.slug}`}
-          className={`inline-flex items-center text-blue-700 hover:text-blue-800 transition-colors duration-200 font-medium ${linkClass}`}
+          className={`inline-flex items-center internal-link font-medium ${linkClass}`}
         >
           {t('common.viewBookDetails')}
           <span className="mr-2">←</span>
@@ -111,12 +111,12 @@ const BookInfoCard: React.FC<BookInfoCardProps> = ({
 
   if (variant === 'detailed') {
     return (
-      <div className={`bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-xl p-6 h-full ${className}`}>
+      <div className={`bg-gradient-to-r from-light-paper to-light-paper/60 border border-dark-paper/30 rounded-xl p-6 h-full ${className}`}>
         <div className="space-y-4">
           {renderCover()}
           <div className="space-y-3 text-center">
             <div className="flex justify-center">
-              <span className="status-badge bg-blue-100 text-blue-700 border border-blue-200">
+              <span className="status-badge bg-blue-100 text-amber-900 border border-blue-200">
                 📚 {t('common.relatedBook')}
               </span>
             </div>

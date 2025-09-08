@@ -98,17 +98,17 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
   const sortedSessions = otherSessions;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50">
+    <div className="min-h-screen">
       {/* Header */}
       <header className="backdrop-blur-glass border-b border-white/20 top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="text-center space-y-4">
             <Logo size="lg" className="justify-center" />
             <div className="space-y-3">
-              <h1 className="text-5xl font-light text-gray-900 tracking-tight">
+              <h1 className="text-5xl font-medium text-gray-900 tracking-tight">
                 {t('home.title')}
               </h1>
-              <p className="text-gray-600 text-lg font-light">
+              <p className="text-gray-600 text-lg font-medium">
                 {t('home.subtitle')}
               </p>
               

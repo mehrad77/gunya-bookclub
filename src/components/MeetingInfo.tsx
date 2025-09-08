@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from '../locales';
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "../locales";
 
 interface MeetingInfoProps {
   meetingInfo: {
@@ -13,10 +13,10 @@ interface MeetingInfoProps {
   className?: string;
 }
 
-const MeetingInfo: React.FC<MeetingInfoProps> = ({ 
-  meetingInfo, 
+const MeetingInfo: React.FC<MeetingInfoProps> = ({
+  meetingInfo,
   sessionDate,
-  className = '' 
+  className = "",
 }) => {
   const { t } = useTranslation();
   const [relativeTime, setRelativeTime] = useState<string | null>(null);
@@ -30,22 +30,15 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({
     if (!timeMatch) return;
 
     const [, hours, minutes] = timeMatch;
-    
+
     // Create the target date/time string in ISO format with timezone
-    const targetDateTimeString = `${sessionDate}T${hours}:${minutes}:00+04:30`;
+    const targetDateTimeString = `${sessionDate}T${hours}:${minutes}:00+03:30`;
     const targetDateTime = new Date(targetDateTimeString);
-    
-    // Fallback: if the timezone parsing fails, use UTC with manual offset
-    if (isNaN(targetDateTime.getTime())) {
-      const fallbackDateTime = new Date(`${sessionDate}T${hours}:${minutes}:00`);
-      const tehranOffset = 4.5 * 60 * 60 * 1000;
-      targetDateTime.setTime(fallbackDateTime.getTime() - tehranOffset);
-    }
 
     // Create RelativeTimeFormat formatter (defaulting to 'fa' for Persian)
-    const rtf = new Intl.RelativeTimeFormat('fa', { 
-      numeric: 'always',
-      style: 'short'
+    const rtf = new Intl.RelativeTimeFormat("fa", {
+      numeric: "always",
+      style: "long",
     });
 
     const updateRelativeTime = () => {
@@ -66,19 +59,27 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({
       const hours = Math.floor(minutes / 60);
       const days = Math.floor(hours / 24);
 
-      let formattedTime = '';
+      let formattedTime = "";
       if (days > 0) {
-        formattedTime = rtf.format(days, 'day');
+        formattedTime = rtf.format(days, "day");
       } else if (hours > 0) {
-        formattedTime = rtf.format(hours, 'hour');
+        // When less than a day, show both hours and minutes
+        const remainingMinutes = minutes % 60;
+        const hoursText = rtf.format(hours, "hour");
+        if (remainingMinutes > 0) {
+          const minutesText = rtf.format(remainingMinutes, "minute");
+          formattedTime = `${hoursText} و ${minutesText}`;
+        } else {
+          formattedTime = hoursText;
+        }
       } else if (minutes > 0) {
-        formattedTime = rtf.format(minutes, 'minute');
+        formattedTime = rtf.format(minutes, "minute");
       } else if (seconds > 0) {
-        formattedTime = rtf.format(seconds, 'second');
+        formattedTime = rtf.format(seconds, "second");
       }
 
       // Persian hack: replace "بعد" with "دیگر" for more natural language
-      const naturalPersianTime = formattedTime.replace(/بعد/g, 'دیگر');
+      const naturalPersianTime = formattedTime.replace(/بعد/g, "") + "دیگر";
       setRelativeTime(naturalPersianTime);
     };
 
@@ -94,36 +95,35 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="text-sm space-y-2">
+        <div className="flex items-center gap-2">🕐 {meetingInfo.time}</div>
         <div className="flex items-center gap-2">
-          🕐 {meetingInfo.time}
-        </div>
-        <div className="flex items-center gap-2">
-          🌍 {t('common.timezone')}: {meetingInfo.timezone}
+          🌍 {t("common.timezone")}: {meetingInfo.timezone}
         </div>
         {sessionDate && (relativeTime || isExpired) && (
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="flex flex-row justify-between items-start gap-2 rounded-lg border border-dark-paper/30 p-4">
             {isExpired ? (
               <div className="flex items-center gap-2">
-                ⏰ <span className="font-medium">{t('session.sessionStarted')}</span>
+                ⏰{" "}
+                <span className="font-medium">
+                  {t("session.sessionStarted")}
+                </span>
               </div>
             ) : (
               <div className="flex items-center gap-2">
                 ⏰ <span className="font-medium">{relativeTime}</span>
               </div>
             )}
+            <a
+              href={meetingInfo.meetLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="external-link break-all ml-2"
+            >
+              <span className="text-xs opacity-70"> ↗ </span>{" "}
+              {meetingInfo.meetLink}
+            </a>
           </div>
         )}
-        <div className="flex items-start gap-2">
-          🔗 
-          <a 
-            href={meetingInfo.meetLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 underline break-all"
-          >
-            <span className="text-xs opacity-70"> ↗ </span> {meetingInfo.meetLink}
-          </a>
-        </div>
       </div>
     </div>
   );

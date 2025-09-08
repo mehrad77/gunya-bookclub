@@ -3,6 +3,12 @@
 /* Persian fonts */
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@200;300;400;500;600;700&display=swap');
 
+/* Custom colors */
+@theme {
+  --color-light-paper: #FFF8DD;
+  --color-dark-paper: #E0D3AF;
+}
+
 @layer base {
   html {
     direction: rtl;
@@ -11,9 +17,9 @@
   }
   
   body {
+    @apply bg-gradient-to-br from-light-paper via-gray-50 to-light-paper;
     direction: rtl;
     text-align: right;
-    background-color: #fefefe;
     color: #2d3748;
     line-height: 1.7;
   }
@@ -21,6 +27,14 @@
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  .internal-link {
+    @apply text-amber-900 hover:text-amber-700 transition-colors duration-200;
+  }
+
+  .external-link {
+    @apply text-blue-600 hover:text-blue-800 underline transition-colors duration-200;
   }
 }
 
@@ -33,10 +47,6 @@
     @apply hover:transform hover:-translate-y-1;
   }
   
-  .gradient-bg {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  }
-  
   .text-gradient {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
@@ -46,8 +56,8 @@
   
   .minimal-button {
     @apply inline-flex items-center px-6 py-3 text-sm font-medium rounded-xl transition-all duration-200;
-    @apply bg-gray-50 text-gray-700 hover:bg-gray-100 hover:text-gray-900;
-    @apply border border-gray-200 hover:border-gray-300;
+    @apply bg-light-paper text-gray-700 hover:bg-dark-paper/30 hover:text-gray-900;
+    @apply border border-dark-paper/30 hover:border-dark-paper/50;
   }
   
   .primary-button {
@@ -113,6 +123,6 @@
   
   .backdrop-blur-glass {
     backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.3);
   }
 }
