@@ -1,0 +1,7 @@
+---
+clubName: "The Book Club"
+time: "19:00 – 21:00"
+timezone: "Asia/Tehran"
+meetingInfo: "اطلاعات پیوستن Google Meet"
+meetLink: "https://meet.google.com/jtt-pscs-zsq"
+---

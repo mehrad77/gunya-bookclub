@@ -42,6 +42,13 @@ const config: GatsbyConfig = {
       "path": "./content/sessions/"
     },
     __key: "sessions"
+  }, {
+    resolve: 'gatsby-source-filesystem',
+    options: {
+      "name": "constants",
+      "path": "./content/constants/"
+    },
+    __key: "constants"
   }]
 };
 

@@ -17,15 +17,25 @@ interface BookInfo {
   coverImage?: string;
 }
 
+interface MeetingInfo {
+  clubName: string;
+  time: string;
+  timezone: string;
+  meetingInfo: string;
+  meetLink: string;
+}
+
 interface UpcomingSessionCardProps {
   session: SessionInfo;
   relatedBook?: BookInfo;
+  meetingInfo?: MeetingInfo;
   className?: string;
 }
 
 const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({ 
   session, 
   relatedBook,
+  meetingInfo,
   className = ''
 }) => {
   return (
@@ -66,17 +76,39 @@ const UpcomingSessionCard: React.FC<UpcomingSessionCardProps> = ({
                   day: "numeric"
                 })}
               </p>
+
+              {/* Meeting Information */}
+              {meetingInfo && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-3">
+                  <div className="flex items-center gap-2 text-blue-800 font-medium">
+                    🎯 {meetingInfo.clubName}
+                  </div>
+                  <div className="text-blue-700 text-sm space-y-1">
+                    <div className="flex items-center gap-2">
+                      🕐 {meetingInfo.time}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      🌍 منطقه زمانی: {meetingInfo.timezone}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      📞 {meetingInfo.meetingInfo}
+                    </div>
+                    <div className="flex items-start gap-2">
+                      🔗 پیوند تماس تصویری:{" "}
+                      <a 
+                        href={meetingInfo.meetLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 underline break-all"
+                      >
+                        {meetingInfo.meetLink}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="flex justify-start">
-              <Link
-                to={`/sessions/${session.slug}`}
-                className="primary-button inline-flex items-center gap-2"
-              >
-                مشاهده جزئیات جلسه
-                <span>←</span>
-              </Link>
-            </div>
           </div>
 
           {/* Related Book - Left Side */}

@@ -34,10 +34,19 @@ interface IndexPageData {
       };
     }>;
   };
+  upcomingMeeting: {
+    frontmatter: {
+      clubName: string;
+      time: string;
+      timezone: string;
+      meetingInfo: string;
+      meetLink: string;
+    };
+  };
 }
 
 const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
-  const { allBooks, allSessions } = data;
+  const { allBooks, allSessions, upcomingMeeting } = data;
 
   // Sort books by status and number
   const sortedBooks = [...allBooks.nodes].sort((a, b) => {
@@ -118,6 +127,7 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
                     key={session.frontmatter.slug}
                     session={session.frontmatter}
                     relatedBook={relatedBook?.frontmatter}
+                    meetingInfo={upcomingMeeting?.frontmatter}
                   />
                 );
               })}
@@ -230,6 +240,17 @@ export const query = graphql`
           bookSlug
           status
         }
+      }
+    }
+    upcomingMeeting: mdx(
+      internal: { contentFilePath: { regex: "/constants/upcoming-meeting/" } }
+    ) {
+      frontmatter {
+        clubName
+        time
+        timezone
+        meetingInfo
+        meetLink
       }
     }
   }
