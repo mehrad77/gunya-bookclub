@@ -23,7 +23,6 @@ interface BookData {
       translator?: string;
       pages: string;
       coverImage?: string;
-      bookNumber: number;
       status: string;
       links?: {
         wikipediaFarsi?: string;
@@ -89,9 +88,6 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
               
               <div className="lg:w-2/3 space-y-6">
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className="status-badge bg-blue-50 text-blue-700 border border-blue-200">
-                    {t('common.book')} {frontmatter.bookNumber}
-                  </span>
                   <span className={`status-badge ${
                     frontmatter.status === 'completed' ? 'status-completed' :
                     frontmatter.status === 'current' ? 'status-current' :
@@ -181,7 +177,9 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {frontmatter.links.wikipediaFarsi && (
                   <a 
-                    href={frontmatter.links.wikipediaFarsi} 
+                    href={frontmatter.links.wikipediaFarsi}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="minimal-button justify-start hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
                   >
                     🌐 {t('links.wikipediaFarsi')}
@@ -189,7 +187,9 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                 )}
                 {frontmatter.links.wikipediaEnglish && (
                   <a 
-                    href={frontmatter.links.wikipediaEnglish} 
+                    href={frontmatter.links.wikipediaEnglish}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="minimal-button justify-start hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"
                   >
                     🌐 {t('links.wikipediaEnglish')}
@@ -197,7 +197,9 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                 )}
                 {frontmatter.links.wikisource && (
                   <a 
-                    href={frontmatter.links.wikisource} 
+                    href={frontmatter.links.wikisource}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="minimal-button justify-start hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200"
                   >
                     📜 {t('links.wikisource')}
@@ -205,7 +207,9 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                 )}
                 {frontmatter.links.goodreadsEnglish && (
                   <a 
-                    href={frontmatter.links.goodreadsEnglish} 
+                    href={frontmatter.links.goodreadsEnglish}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="minimal-button justify-start hover:bg-green-50 hover:text-green-700 hover:border-green-200"
                   >
                     📚 {t('links.goodreadsEnglish')}
@@ -213,7 +217,9 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                 )}
                 {frontmatter.links.goodreadsFarsi && (
                   <a 
-                    href={frontmatter.links.goodreadsFarsi} 
+                    href={frontmatter.links.goodreadsFarsi}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="minimal-button justify-start hover:bg-green-50 hover:text-green-700 hover:border-green-200"
                   >
                     📚 {t('links.goodreadsFarsi')}
@@ -221,7 +227,9 @@ const BookTemplate: React.FC<PageProps<BookData, BookPageContext>> = ({ data }) 
                 )}
                 {frontmatter.links.audiobook && (
                   <a 
-                    href={frontmatter.links.audiobook} 
+                    href={frontmatter.links.audiobook}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="minimal-button justify-start hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200"
                   >
                     🎧 {t('links.audiobook')}
@@ -271,7 +279,6 @@ export const query = graphql`
         translator
         pages
         coverImage
-        bookNumber
         status
         links {
           wikipediaFarsi

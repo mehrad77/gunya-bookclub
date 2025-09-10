@@ -78,8 +78,8 @@ const MeetingInfo: React.FC<MeetingInfoProps> = ({
         formattedTime = rtf.format(seconds, "second");
       }
 
-      // Persian hack: replace "بعد" with "دیگر" for more natural language
-      const naturalPersianTime = formattedTime.replace(/بعد/g, "") + "دیگر";
+      // Persian hack: replace "بعد"
+      const naturalPersianTime = formattedTime.replace(/بعد/g, "") + "";
       setRelativeTime(naturalPersianTime);
     };
 

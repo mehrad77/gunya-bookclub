@@ -8,7 +8,6 @@ interface BookInfo {
   title: string;
   titleFarsi?: string;
   author: string;
-  bookNumber: number;
   status: string;
   coverImage?: string;
 }
@@ -37,9 +36,6 @@ const BookCard: React.FC<BookCardProps> = ({ book, className = '' }) => {
 
           <div className="flex-1 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="status-badge bg-gray-50 text-gray-600 border border-gray-200">
-                {t('common.book')} {book.bookNumber}
-              </span>
               <StatusBadge status={book.status} type="book" />
             </div>
 

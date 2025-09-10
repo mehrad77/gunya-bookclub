@@ -15,7 +15,6 @@ interface IndexPageData {
         title: string;
         titleFarsi?: string;
         author: string;
-        bookNumber: number;
         status: string;
         coverImage?: string;
       };
@@ -68,7 +67,7 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
       statusOrder[b.frontmatter.status as keyof typeof statusOrder] ?? 3;
 
     if (statusA !== statusB) return statusA - statusB;
-    return b.frontmatter.bookNumber - a.frontmatter.bookNumber;
+    return 0;
   });
 
   // Helper function to get session status
@@ -87,9 +86,13 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
   };
 
   // Separate upcoming sessions from others
-  const upcomingSessions = allSessions.nodes.filter(
-    (session) => getSessionStatus(session) === "upcoming"
-  );
+  const upcomingSessions = allSessions.nodes
+    .filter((session) => getSessionStatus(session) === "upcoming")
+    .sort(
+      (a, b) =>
+        new Date(a.frontmatter.date).getTime() -
+        new Date(b.frontmatter.date).getTime()
+    );
   const otherSessions = allSessions.nodes.filter(
     (session) => getSessionStatus(session) !== "upcoming"
   );
@@ -106,12 +109,12 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
             <Logo size="lg" className="justify-center" />
             <div className="space-y-3">
               <h1 className="text-5xl font-medium text-gray-900 tracking-tight">
-                {t('home.title')}
+                {t("home.title")}
               </h1>
               <p className="text-gray-600 text-lg font-medium">
-                {t('home.subtitle')}
+                {t("home.subtitle")}
               </p>
-              
+
               {/* Social Media Links */}
               {socialMedia?.frontmatter?.socialMedia && (
                 <div className="flex justify-center items-center gap-4 text-sm">
@@ -124,13 +127,15 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
                       className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors duration-200 underline decoration-dotted underline-offset-8 hover:decoration-solid"
                       title={social.nameFarsi}
                     >
-                      <span><span className="text-xs opacity-70"> ↗ </span>{social.nameFarsi}</span>
-                      
+                      <span>
+                        <span className="text-xs opacity-70"> ↗ </span>
+                        {social.nameFarsi}
+                      </span>
                     </a>
                   ))}
                 </div>
               )}
-              
+
               <div className="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
             </div>
           </div>
@@ -142,7 +147,9 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
         {upcomingSessions.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center space-x-reverse space-x-4 mb-4">
-              <h2 className="text-3xl font-light text-gray-900">{t('home.upcomingSession')}</h2>
+              <h2 className="text-3xl font-light text-gray-900">
+                {t("home.upcomingSession")}
+              </h2>
               <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
             </div>
 
@@ -170,16 +177,15 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
           {/* Books Section */}
           <section className="space-y-8">
             <div className="flex items-center space-x-reverse space-x-4">
-              <h2 className="text-3xl font-light text-gray-900">{t('home.books')}</h2>
+              <h2 className="text-3xl font-light text-gray-900">
+                {t("home.books")}
+              </h2>
               <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
             </div>
 
             <div className="space-y-6">
               {sortedBooks.map((book) => (
-                <BookCard
-                  key={book.frontmatter.slug}
-                  book={book.frontmatter}
-                />
+                <BookCard key={book.frontmatter.slug} book={book.frontmatter} />
               ))}
             </div>
           </section>
@@ -187,7 +193,9 @@ const IndexPage: React.FC<PageProps<IndexPageData>> = ({ data }) => {
           {/* Sessions Section */}
           <section className="space-y-8">
             <div className="flex items-center space-x-reverse space-x-4">
-              <h2 className="text-3xl font-light text-gray-900">{t('home.pastSessions')}</h2>
+              <h2 className="text-3xl font-light text-gray-900">
+                {t("home.pastSessions")}
+              </h2>
               <div className="flex-1 h-px bg-gradient-to-l from-gray-200 to-transparent"></div>
             </div>
 
@@ -218,17 +226,17 @@ export default IndexPage;
 
 export const Head: HeadFC<IndexPageData> = ({ data, location }) => {
   const { t } = useTranslation();
-  
+
   return (
     <Seo
-      title={t('seo.homeTitle')}
-      description={t('seo.homeDescription')}
+      title={t("seo.homeTitle")}
+      description={t("seo.homeDescription")}
       pathname={location.pathname}
       organizationSchema={{
-        name: t('seo.organizationName'),
+        name: t("seo.organizationName"),
         url: "https://bookclub.shab.boo",
         logo: "https://bookclub.shab.boo/favicon/android-chrome-512x512.png",
-        description: t('seo.organizationDescription'),
+        description: t("seo.organizationDescription"),
         foundingDate: "2024",
         address: {
           addressCountry: "IR",
@@ -252,8 +260,7 @@ export const query = graphql`
           slug
           title
           titleFarsi
-          author
-          bookNumber
+          author          
           status
           coverImage
         }

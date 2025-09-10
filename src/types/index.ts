@@ -11,7 +11,6 @@ export interface Book {
   pages: string;
   description: string;
   coverImage?: string;
-  bookNumber: number;
   status: 'upcoming' | 'current' | 'completed';
   links?: {
     wikipediaFarsi?: string;

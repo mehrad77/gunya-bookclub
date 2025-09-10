@@ -28,7 +28,6 @@ genre: ["ژانر۱", "ژانر۲"]
 translator: "مترجم"
 pages: "تعداد صفحات"
 coverImage: "path/to/image"
-bookNumber: 1
 status: "upcoming" | "current" | "completed"
 links:
   wikipediaFarsi: "link"
